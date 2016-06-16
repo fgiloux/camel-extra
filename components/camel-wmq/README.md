@@ -138,7 +138,7 @@ Steps for installation on Karaf:
 
 * Install the IBM MQ OSGi jars into Karaf. These are included in a IBM MQ installation usually under `/opt/mqm/java/lib/OSGi'. The two files to install are:
   * com.ibm.mq.osgi.allclientprereqs_8.0.0.4.jar 
-  * com.ibm.mq.osgi.allclient_8.0.0.4.jar (a wrap is required to import the packages org.xml.sax and org.xml.sax.helpers, these packages are provided by the JRE rt.jar, a alternative change would be to change the Karaf system bundle package exports to include these 2 packages)
+  * com.ibm.mq.osgi.allclient_8.0.0.4.jar (a wrap is required to import the packages org.xml.sax and org.xml.sax.helpers, these packages are provided by the JRE rt.jar, a alternative change would be to change the Karaf system bundle package exports to include these 2 packages as the system bundle is not providing these by default to all bundles)
   ```
   osgi:install 'wrap:file:/opt/mqm/java/lib/OSGi/com.ibm.mq.osgi.allclient_8.0.0.4.jar$overwrite=merge&Import-Package=\
         com.ibm.crypto.provider;resolution:=optional,\
