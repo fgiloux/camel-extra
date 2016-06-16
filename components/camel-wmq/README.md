@@ -59,10 +59,10 @@ where:
 
 
 * `wmqconfig` is a instance of `org.apacheextras.camel.component.wmq.WMQConfig` and requires
-  * `queueManager`
+  * `queueManager` - name of the queue manager this component will connect too
   * `connectionMode` - either "binding" or "client"
   * if connectionMode is client then additional information is needed:
-    * host
+    * host 
     * port
     * channel
     * username
