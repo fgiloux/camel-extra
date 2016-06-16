@@ -35,7 +35,7 @@ A second route is used here to show the transaction support is used across route
 * The WMQProducer process method is invoked which:
     1. Gets the MQQueueManager from the ThreadSynchronisationManager
     2. Uses this MQQueueManager to open/put/close on a destination
-* The exchange is routed to direct:test and then logged
+* The exchange is routed to direct:test and then logged which ends the routing.
 * The exchange is finished which causes the transacted EIP to invoke the TransactionManager.
     4. The transaction manager doCommit is invoked
     5. The transaction object and MQQueueManager for the transaction is retrieved
@@ -59,17 +59,26 @@ The transaction manager is responsible for
 * Transactions may occur simultaneously.
 * There is 1 MQQueueManager per transaction
 
-In order for the transaction manager to identify the correct transaction to commit when there are simultaneous transactions occuring a transaction object is used in conjunction with the methods doGetTransaction.
+If multiple transactions/threads are running then the interaction with the transaction manager will be interweaved. 
+For example 
+* Transaction 1 - begin
+* Transaction 2 - begin
+* Transaction 2 - commit
+* Transaction 1 - commit
 
-The doGetTransaction method is responsible for creating a transaction object. In conjunction with the TransactionSynchonizationManager a transaction can then be restored by retrieving the MQQueueManager for the current thread.
+It is important that everytime a thread wishes to interact with the transaction manager the correct transaction is bound to the transaction manager. To support this the abstract method doGetTransaction is implemented. 
+
+This method is responsible for swapping between the transaction contexts based, this is achieved by looking up the transaction resources from the current thread using the TransactionSynchronisationManager.
+
 
 ### TransactionSynchronizationManager
 
-This is a utility class which binds resources to threads. Documentation can be found at 
+This is a utility class which binds transaciton resources to threads, in our case we bind a MQQueueManager instance and a unique id. 
+
+The JavaDoc for this class can be found at 
 http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/transaction/support/TransactionSynchronizationManager.html
 
-The main use of this class is to bind transactional resources to be used. 
+The MQQueueManager (and id) are binded to the thread in the TransactionManager's doBegin() method. The MQQueueManager is then retrieved via a TransactionSynchronizationManager.getResource() in the Producer and Consumer. Using this approach the Producer and Consumer delegate the responsiblity for transactional awareness.
 
-Our use of this class is to bind a MQQueueManager to the transaction thread such that it can be used in the Consumer/Producer. This binding takes places in the TransactionManager's doBegin() method. 
+Similarly the MQQueueMananger (and id) are retreived from the thread in the TransactionManager's doCommit() and doRollback() methods. Once these methods have completed the MQQueueManager is then released using the TransactionSynchronizationManager.unbind() function.
 
-The MQQueueManager is then unbound from the thread in the TransactionManager's doCommit() or doRollback() method.
