@@ -42,4 +42,32 @@ A second route is used here to show the transaction support is used across route
     6. The MQQueueManager's commit function is invoked.
   
 
+## TransactionManager
 
+A custom transaction manager for native IBM MQI has been implemented by extending the Spring PlatformTransactionManager. The DatasourceTransactionManager provides a good example - https://github.com/spring-projects/spring-framework/blob/master/spring-jdbc/src/main/java/org/springframework/jdbc/datasource/DataSourceTransactionManager.java
+
+The transaction manager is responsible for 
+* Creating a transaction
+* Committing a transaction
+* Rolling back a transaction
+
+### Transaction manager facts
+
+* A transaction manager can manage many transactions. 
+* Transactions may occur simultaneously.
+* There is 1 MQQueueManager per transaction
+
+In order for the transaction manager to identify the correct transaction to commit when there are simultaneous transactions occuring a transaction object is used in conjunction with the methods doGetTransaction.
+
+The doGetTransaction method is responsible for creating a transaction object.
+
+### TransactionSynchronizationManager
+
+This is a utility class which binds resources to threads. Documentation can be found at 
+http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/transaction/support/TransactionSynchronizationManager.html
+
+The main use of this class is to bind transactional resources to be used. 
+
+Our use of this class is to bind a MQQueueManager to the transaction thread such that it can be used in the Consumer/Producer. This binding takes places in the TransactionManager's doBegin() method. 
+
+The MQQueueManager is then unbound from the thread in the TransactionManager's doCommit() or doRollback() method.
