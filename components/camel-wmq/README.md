@@ -179,3 +179,6 @@ Steps for installation on Karaf:
 	osgi:install file:/opt/mqm/java/lib/OSGi/com.ibm.mq.osgi.allclientprereqs_8.0.0.4.jar
   ```
   
+## Issues on Karaf
+
+A system wide `osgi:refresh` command currently does not work. The only way to refresh the system is via a restart. This is due to only 1 class loader being able to load native libraries at a time. When a refresh occurs the class loader is not garbage collected and the new class loader will be unable to load the classes. http://tech-tauk.blogspot.de/2009/11/issues-with-loading-native-libraries-in.html
