@@ -4,7 +4,7 @@ This walkthrough will take you throw a working example of how the component work
 
 A sample route may look like the following:
 
-```
+```xml
 <route id="producer">
   <from uri="timer:foo?period=1000"/>
   <transacted ref="PROPAGATION_REQUIRED"/>
