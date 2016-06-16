@@ -1,5 +1,7 @@
 # Technical walkthrough of code
 
+This walkthrough will take you throw a working example of how the component works in particular to the transaction support.
+
 A sample route may look like the following:
 
 ```
@@ -23,3 +25,9 @@ A sample route may look like the following:
 </route>
 
 ```
+A second route is used here to show the transaction support is used across routes.
+
+* Timer foo is invoked and creates a Exchange.
+* The transacted EIP is invoked which causes several interactions with the TransactionManager.
+    *  
+
