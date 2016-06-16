@@ -44,7 +44,9 @@ A second route is used here to show the transaction support is used across route
 
 ## TransactionManager
 
-A custom transaction manager for native IBM MQI has been implemented by extending the Spring PlatformTransactionManager. The DatasourceTransactionManager provides a good example - https://github.com/spring-projects/spring-framework/blob/master/spring-jdbc/src/main/java/org/springframework/jdbc/datasource/DataSourceTransactionManager.java
+A custom transaction manager called WMQTransactionManager has been implemented by extending the Spring PlatformTransactionManager. The purpose of this class is to provide transactional support to the native IBM MQ interface.
+
+The DatasourceTransactionManager provides a good example - https://github.com/spring-projects/spring-framework/blob/master/spring-jdbc/src/main/java/org/springframework/jdbc/datasource/DataSourceTransactionManager.java
 
 The transaction manager is responsible for 
 * Creating a transaction
@@ -59,7 +61,7 @@ The transaction manager is responsible for
 
 In order for the transaction manager to identify the correct transaction to commit when there are simultaneous transactions occuring a transaction object is used in conjunction with the methods doGetTransaction.
 
-The doGetTransaction method is responsible for creating a transaction object.
+The doGetTransaction method is responsible for creating a transaction object. In conjunction with the TransactionSynchonizationManager a transaction can then be restored by retrieving the MQQueueManager for the current thread.
 
 ### TransactionSynchronizationManager
 
