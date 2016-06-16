@@ -29,7 +29,7 @@ The usual installation path on a Linux system is /opt/mqm/java/lib/com.ibm.mq.os
 
 Sample component setup
 
-```
+```xml
   <bean id="wmq" class="org.apacheextras.camel.component.wmq.WMQComponent">
   	<property name="config" ref="wmqConfig"/>
   	<property name="transactionManager" ref="transactionManager"/> 
@@ -125,7 +125,7 @@ uses it if present):
 
 To send a transacted message you must set the header "mq.put.options" to MQGMO_SYNCPOINT. If this is not set the message will not be part of the transaction regardless of whether you have specified transacted or not.
 
-```
+```xml
 <setHeader headerName="mq.put.options">
 	<constant>MQGMO_SYNCPOINT</constant>
 </setHeader>
@@ -145,8 +145,8 @@ Steps for installation on Karaf:
 * Install the IBM MQ native libraries in Karaf lib folder. The 2 files can be found in /opt/mqm/java/lib64 and are called libmqjbnd.so and libmqjexitstub02.so. We can do that with symbolic links by executing the following in the Karaf lib folder:
   ```
   ln -s /opt/mqm/java/lib64/libmqjbnd.so
-	ln -s /opt/mqm/java/lib64/libmqjexitstub02.so
-	```
+  ln -s /opt/mqm/java/lib64/libmqjexitstub02.so
+  ```
 
 * Install the IBM MQ OSGi jars into Karaf. These are included in a IBM MQ installation usually under `/opt/mqm/java/lib/OSGi'. The two files to install are:
   * com.ibm.mq.osgi.allclientprereqs_8.0.0.4.jar 
