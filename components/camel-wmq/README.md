@@ -121,6 +121,17 @@ uses it if present):
 * `mq.rfh2.version`: the message RFH2 version
 * `mq.rfh2.folder.[FOLDER_NAME]`: the message RFH2 folder, where the [FOLDER_NAME] can be MCD, JMS, USR, PSC, PSCR, OTHER (depending of the content of the message).
 
+## Transaction support
+
+To send a transacted message you must set the header "mq.put.options" to MQGMO_SYNCPOINT. If this is not set the message will not be part of the transaction regardless of whether you have specified transacted or not.
+
+```
+<setHeader headerName="mq.put.options">
+	<constant>MQGMO_SYNCPOINT</constant>
+</setHeader>
+```
+
+
 ## Installation in Apache Karaf
 
 The camel-wmq component can be installed directly in Karaf. 
@@ -191,5 +202,6 @@ A system wide `osgi:refresh` command currently does not work. The only way to re
 * General resource cleanup operations - WMQTransactionManager, WMQConsumer and WMQProducer need to ensure correct resource cleanup via try/catch/finally.
 * Message segmentation is currently always turned on. Do need to make this configurable? Currently controlled by isSegmented() method on WMQProducer.
 * Client connection requires username and password - it is possible however to connect to IBM MQ without a username / password.
+* Transactions - currently only transactions are supported. We need a way to turn this off.
 * Test the various different transaction propagations but mainly REQURIES, REQUIRES_NEW, see https://docs.spring.io/spring/docs/1.2.x/javadoc-api/org/springframework/transaction/TransactionDefinition.html
 
