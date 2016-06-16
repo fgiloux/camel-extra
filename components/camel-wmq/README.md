@@ -7,6 +7,7 @@ This fork is a extenson of the camel-extra camel-wmq component. This extension p
 * supports the configuration via a component instead of on a endpoint
 * binding and client connectivity
 * connection pooling
+* message segmentation (turned on by default)
 * local transaction support by a custom TransactionManager implementation
 
 The component provides both consumer and producer endpoints.
