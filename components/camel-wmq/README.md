@@ -183,3 +183,13 @@ Steps for installation on Karaf:
 ## Issues on Karaf
 
 A system wide `osgi:refresh` command currently does not work. The only way to refresh the system is via a restart. This is due to only 1 class loader being able to load native libraries at a time. When a refresh occurs the class loader is not garbage collected and the new class loader will be unable to load the classes. http://tech-tauk.blogspot.de/2009/11/issues-with-loading-native-libraries-in.html
+
+### Work to do
+
+* Global / XA transaction support - will probably mean a custom implementation of javax.transaction.xa.XAResource
+* Connection Pool / Manager - the connection manager `com.ibm.mq.MQSimpleConnectionManager` must be set to `ACTIVE` to start and `DEACTIVE` to finish. We currently only set it to `ACTIVE` and may cause resource cleanup issues
+* General resource cleanup operations - WMQTransactionManager, WMQConsumer and WMQProducer need to ensure correct resource cleanup via try/catch/finally.
+* Message segmentation is currently always turned on. Do need to make this configurable? Currently controlled by isSegmented() method on WMQProducer.
+* Client connection requires username and password - it is possible however to connect to IBM MQ without a username / password.
+* Test the various different transaction propagations but mainly REQURIES, REQUIRES_NEW, see https://docs.spring.io/spring/docs/1.2.x/javadoc-api/org/springframework/transaction/TransactionDefinition.html
+
