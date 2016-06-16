@@ -204,4 +204,5 @@ A system wide `osgi:refresh` command currently does not work. The only way to re
 * Client connection requires username and password - it is possible however to connect to IBM MQ without a username / password.
 * Transactions - currently only transactions are supported. We need a way to turn this off.
 * Test the various different transaction propagations but mainly REQURIES, REQUIRES_NEW, see https://docs.spring.io/spring/docs/1.2.x/javadoc-api/org/springframework/transaction/TransactionDefinition.html
+* Additional testing around Consumers, in particualr is the use of the transactionalTemplate required.
 
