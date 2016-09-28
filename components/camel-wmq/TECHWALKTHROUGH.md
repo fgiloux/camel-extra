@@ -66,19 +66,19 @@ For example
 * Transaction 2 - commit
 * Transaction 1 - commit
 
-It is important that everytime a thread wishes to interact with the transaction manager the correct transaction is bound to the transaction manager. To support this the abstract method doGetTransaction is implemented. 
+It is important that every time a thread wishes to interact with the transaction manager the correct transaction is bound to the transaction manager. To support this the abstract method doGetTransaction is implemented. 
 
 This method is responsible for swapping between the transaction contexts based, this is achieved by looking up the transaction resources from the current thread using the TransactionSynchronisationManager.
 
 
 ### TransactionSynchronizationManager
 
-This is a utility class which binds transaciton resources to threads, in our case we bind a MQQueueManager instance and a unique id. 
+This is a utility class which binds transaction resources to threads, in our case we bind a MQQueueManager instance and a unique id. 
 
 The JavaDoc for this class can be found at 
 http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/transaction/support/TransactionSynchronizationManager.html
 
-The MQQueueManager (and id) are binded to the thread in the TransactionManager's doBegin() method. The MQQueueManager is then retrieved via a TransactionSynchronizationManager.getResource() in the Producer and Consumer. Using this approach the Producer and Consumer delegate the responsiblity for transactional awareness.
+The MQQueueManager (and id) are binded to the thread in the TransactionManager's doBegin() method. The MQQueueManager is then retrieved via a TransactionSynchronizationManager.getResource() in the Producer and Consumer. Using this approach the Producer and Consumer delegate the responsibility for transactional awareness.
 
-Similarly the MQQueueMananger (and id) are retreived from the thread in the TransactionManager's doCommit() and doRollback() methods. Once these methods have completed the MQQueueManager is then released using the TransactionSynchronizationManager.unbind() function.
+Similarly the MQQueueMananger (and id) are retrieved from the thread in the TransactionManager's doCommit() and doRollback() methods. Once these methods have completed the MQQueueManager is then released using the TransactionSynchronizationManager.unbind() function.
 

@@ -3,8 +3,8 @@
 This Apache Camel components allows you to deal directly with IBM MQ without using the JMS wrapping.
 It natively uses the MQ API to consume and produce messages on the destinations.
 
-This fork is a extenson of the camel-extra camel-wmq component. This extension points are:
-* supports the configuration via a component instead of on a endpoint
+This fork is a extension of the camel-extra camel-wmq component. These extension points are:
+* supports the configuration via a component instead of an endpoint
 * binding and client connectivity
 * connection pooling
 * message segmentation (turned on by default)
@@ -18,10 +18,10 @@ In order to be able to build the component, you have to add the IBM MQ dependenc
 using the `mvn install:install-file` command:
 
 ```
-mvn install:install-file -DgroupId=com.ibm.mq -DartifactId=mqosgi -Dversion=8.0.0.4 -Dpackaging=jar -Dfile=/path/to/com.ibm.mq.osgi.java_8.0.0.4.jar
+mvn install:install-file -DgroupId=com.ibm.mq -DartifactId=mqosgi -Dversion=8.0.0.5 -Dpackaging=jar -Dfile=/path/to/com.ibm.mq.osgi.java_8.0.0.5.jar
 ```
 
-The usual installation path on a Linux system is /opt/mqm/java/lib/com.ibm.mq.osgi.java_8.0.0.4.jar
+The usual installation path on a Linux system is /opt/mqm/java/lib/OSGi/com.ibm.mq.osgi.java_8.0.0.5.jar
 
 ## Usage
 
@@ -59,18 +59,18 @@ where:
 * `wmq` is the component. It requires a `org.apacheextras.camel.component.wmq.WMQConfig` and a `org.apacheextras.camel.component.wmq.WMQTransactionManager`
 
 
-* `wmqconfig` is a instance of `org.apacheextras.camel.component.wmq.WMQConfig` and requires
-  * `queueManager` - name of the queue manager this component will connect too
+* `wmqconfig` is an instance of `org.apacheextras.camel.component.wmq.WMQConfig` and requires
+  * `queueManagerName` - name of the queue manager this component will connect too
   * `connectionMode` - either "binding" or "client"
   * if connectionMode is client then additional information is needed:
-    * host 
+    * hostname
     * port
     * channel
-    * username
-    * password
-  * `connectionManager` - a instance of `com.ibm.mq.MQSimpleConnectionManager` which can control IBM MQ connection pooling. If this is not specified a default pool is created.
+    * userID
+    * userPassword
+  * `connectionManager` - an instance of `com.ibm.mq.MQSimpleConnectionManager` which can control IBM MQ connection pooling. If this is not specified a default pool is created.
 
-* `transactionManager` is a instance of `org.apacheextras.camel.component.wmq.WMQTransactionManager` and requires a reference to `org.apacheextras.camel.component.wmq.WMQConfig`
+* `transactionManager` is an instance of `org.apacheextras.camel.component.wmq.WMQTransactionManager` and requires a reference to `org.apacheextras.camel.component.wmq.WMQConfig`
 
 
 ### URI
@@ -83,7 +83,7 @@ wmq:type:name
 
 where:
 * `type` is optional and the destination type. It can be either `queue` or `topic` (if not provided, the component assumes
-  it's a queue.
+  it's a queue)
 * `name` is the destination name.
 
 Here's a couple of URI examples:
@@ -100,8 +100,8 @@ The WMQ consumer endpoint populates the body of the Camel in message with the pa
 
 On the other hand, the WMQ producer endpoint sends a MQ message with payload populated with the Camel in message body.
 
-Additionally, both endpoints support the following headers (the consumer populates these headers, and the producer
-uses it if present):
+Additionally, both endpoints support the following headers (the producer populates these headers, and the consumer
+uses them if present):
 
 * `mq.mqmd.format`: the message MQMD format
 * `mq.mqmd.charset`: the message MQMD character set
@@ -136,7 +136,7 @@ To send a transacted message you must set the header "mq.put.options" to MQGMO_S
 
 The camel-wmq component can be installed directly in Karaf. 
 
-To install into Karaf a IBM MQ Client must be installed on the server. The native IBM MQ client libaries must then be made available to the Karaf instance, followed lastly by some IBM OSGi jar files.
+To install into Karaf a IBM MQ Client must be installed on the server. The native IBM MQ client libraries must then be made available to the Karaf instance, followed lastly by some IBM OSGi jar files.
 
 Steps for installation on Karaf:
 * Install a IBM MQ Client or Server. This is dependent on platform, please refer to IBM MQ documentation for details. Linux documentation can be found here https://www.ibm.com/support/knowledgecenter/SSFKSJ_8.0.0/com.ibm.mq.ins.doc/q008640_.htm
@@ -149,47 +149,16 @@ Steps for installation on Karaf:
   ```
 
 * Install the IBM MQ OSGi jars into Karaf. These are included in a IBM MQ installation usually under `/opt/mqm/java/lib/OSGi'. The two files to install are:
-  * com.ibm.mq.osgi.allclientprereqs_8.0.0.4.jar 
-  * com.ibm.mq.osgi.allclient_8.0.0.4.jar (a wrap is required to import the packages org.xml.sax and org.xml.sax.helpers, these packages are required by the jar but not imported and will fail without this wrap)
+  * com.ibm.mq.osgi.allclientprereqs_8.0.0.5.jar 
+  * com.ibm.mq.osgi.allclient_8.0.0.5.jar (a wrap is required to import the packages org.xml.sax and org.xml.sax.helpers, these packages are required by the jar but not imported and will fail without this wrap)
   ```
-  osgi:install 'wrap:file:/opt/mqm/java/lib/OSGi/com.ibm.mq.osgi.allclient_8.0.0.4.jar$overwrite=merge&Import-Package=\
-        com.ibm.crypto.provider;resolution:=optional,\
-        com.ibm.misc;resolution:=optional,\
-        com.ibm.security.pkcs7;resolution:=optional,\
-        com.ibm.security.pkcs9;resolution:=optional,\
-        com.ibm.security.pkcsutil;resolution:=optional,\
-        com.ibm.security.util;resolution:=optional,\
-        com.ibm.security.x509;resolution:=optional,\
-        com.sun.jndi.fscontext,\
-        com.sun.jndi.ldap;resolution:=optional,\
-        com.sun.jndi.toolkit.chars,\
-        com.sun.jndi.toolkit.corba;resolution:=optional,\
-        com.sun.jndi.toolkit.ctx;resolution:=optional,\
-        com.sun.jndi.toolkit.dir;resolution:=optional,\
-        com.sun.jndi.toolkit.url;resolution:=optional,\
-        com.sun.jndi.url.file,\
-        com.sun.jndi.url.jndi,\
-        com.sun.jndi.url.ldap;resolution:=optional,\
-        javax.crypto;resolution:=optional,\
-        javax.crypto.spec;resolution:=optional,\
-        javax.jms,\
-        javax.management,\
-        javax.naming,\
-        javax.naming.directory,\
-        javax.naming.event,\
-        javax.naming.ldap,\
-        javax.naming.spi,\
-        javax.security.auth.x500;resolution:=optional,\
-        org.osgi.framework,\
-        javax.security.cert;resolution:=optional,\
-        javax.net.ssl;resolution:=optional,\
-        javax.net.ssl_0.0.0;resolution:=optional,\
-        org.xml.sax,\
-        org.xml.sax.helpers,\
-        javax.xml.parsers'
+    osgi:install -s file:/opt/mqm/java/lib/OSGi/com.ibm.mq.osgi.allclient_8.0.0.5.jar
+    osgi:install -s 'wrap:file:/opt/mqm/java/lib/OSGi/com.ibm.mq.osgi.allclientprereqs_8.0.0.5.jar$overwrite=merge&Export-Package=*; version=1.1.0.1'
 
-	osgi:install file:/opt/mqm/java/lib/OSGi/com.ibm.mq.osgi.allclientprereqs_8.0.0.4.jar
   ```
+Camel-jms comes with jeronimo for jms specifications 1.1.
+It is necessary to replace the jeronimo specs by the ones provided by IBM. This has been done by creating a fake JMS version upper than the one
+exposed by jeronimo but acceptable by camel-jms.
   
 ## Issues on Karaf
 
@@ -204,5 +173,6 @@ A system wide `osgi:refresh` command currently does not work. The only way to re
 * Client connection requires username and password - it is possible however to connect to IBM MQ without a username / password.
 * Transactions - currently only transactions are supported. We need a way to turn this off.
 * Test the various different transaction propagations but mainly REQURIES, REQUIRES_NEW, see https://docs.spring.io/spring/docs/1.2.x/javadoc-api/org/springframework/transaction/TransactionDefinition.html
-* Additional testing around Consumers, in particualr is the use of the transactionalTemplate required.
+* Additional testing around Consumers, in particular is the use of the transactionalTemplate required.
+* Integration test is not finished
 

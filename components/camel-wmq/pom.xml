@@ -39,8 +39,13 @@
     <properties>
         <camel.osgi.export.pkg>org.apacheextras.camel.component.wmq</camel.osgi.export.pkg>
         <camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=wmq</camel.osgi.export.service>
+        <version.karaf>2.4.0.redhat-621107</version.karaf>
+        <version.ops4j-pax-exam>3.5.0</version.ops4j-pax-exam>
+        <version.geronimo-atinject>1.0</version.geronimo-atinject>
+        <version.camel>2.15.1.redhat-621107</version.camel>
+        <version.paxurl>2.4.7</version.paxurl>
     </properties>
-
+	
     <dependencies>
 
 		<dependency>
@@ -53,11 +58,9 @@
          <dependency>
             <groupId>com.ibm.mq</groupId>
             <artifactId>mqosgi</artifactId>
-            <version>8.0.0.4</version>
+            <version>8.0.0.5</version>
             <type>bundle</type>
         </dependency>
-        
-        
 
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -82,7 +85,113 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.ops4j.pax.exam</groupId>
+            <artifactId>pax-exam-junit4</artifactId>
+            <!-- version>${pax.exam.version}</version -->
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.exam</groupId>
+            <artifactId>pax-exam-container-karaf</artifactId>
+            <!-- version>${pax.exam.version}</version -->
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.ops4j.pax.exam</groupId>
+            <artifactId>pax-exam-inject</artifactId>
+            <version>${version.ops4j-pax-exam}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-atinject_1.0_spec</artifactId>
+            <version>${version.geronimo-atinject}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- Karaf Container to run tests in -->
+		<dependency>
+			<groupId>org.apache.karaf</groupId>
+			<artifactId>apache-karaf</artifactId>
+			<version>${version.karaf}</version>
+			<type>zip</type>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.karaf.shell</groupId>
+					<artifactId>org.apache.karaf.shell.dev</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.karaf</groupId>
+					<artifactId>org.apache.karaf.client</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>osgi</artifactId>
+					<groupId>org.eclipse</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>org.apache.felix.framework</artifactId>
+					<groupId>org.apache.felix</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+        
+        <dependency>
+            <groupId>org.apache.karaf.shell</groupId>
+            <artifactId>org.apache.karaf.shell.ssh</artifactId>
+            <version>${version.karaf}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+        	<groupId>org.apache.camel.karaf</groupId>
+        	<artifactId>apache-camel</artifactId>
+        	<type>xml</type>
+        	<version>${version.camel}</version>
+        	<classifier>features</classifier>
+        	<scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.ops4j.pax.url</groupId>
+            <artifactId>pax-url-aether</artifactId>
+            <version>${version.paxurl}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- JUnit dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
     </dependencies>
 
-
+    <build>
+	    <plugins>
+		    <plugin>
+		      <groupId>org.apache.servicemix.tooling</groupId>
+		      <artifactId>depends-maven-plugin</artifactId>
+		      <version>1.2</version>
+		      <executions>
+		        <execution>
+		          <id>generate-depends-file</id>
+		          <goals>
+		            <goal>generate-depends-file</goal>
+		          </goals>
+		        </execution>
+		      </executions>
+		    </plugin>
+	    </plugins>
+    </build>
 </project>

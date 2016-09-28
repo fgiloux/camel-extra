@@ -118,7 +118,7 @@ public class WMQTransactionManager extends AbstractPlatformTransactionManager{
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * Tells us if a transaction exists or not by checkign the presence of a MQQueueManager on the transaction object
+	 * Tells us if a transaction exists or not by checking the presence of a MQQueueManager on the transaction object
 	 */
 	@Override
 	protected boolean isExistingTransaction(Object transaction) {

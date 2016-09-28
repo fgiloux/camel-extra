@@ -109,6 +109,11 @@ public class WMQConfig {
     	Hashtable<String,Object> properties = new Hashtable<String,Object>();
     	if (getConnectionMode().equals("binding")) {
     		properties.put(CMQC.TRANSPORT_PROPERTY, CMQC.TRANSPORT_MQSERIES_BINDINGS);
+    		LOGGER.debug("username:*" + getQueueManagerUsername() + "*");
+    		if (getQueueManagerUsername() != null) {
+    			properties.put(MQConstants.USER_ID_PROPERTY, getQueueManagerUsername());
+    			properties.put(MQConstants.PASSWORD_PROPERTY, getQueueManagerPassword());
+    		}
     	} else {
     		properties.put("hostname",getQueueManagerHostname());
     		properties.put("port", Integer.parseInt(getQueueManagerPort()));
