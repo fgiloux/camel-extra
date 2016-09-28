@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- troubleshooting
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:amq="http://activemq.apache.org/schema/core"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+    xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    	xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+    	                    http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+    	                    http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+-->
+<!--
+   <cm:property-placeholder persistent-id="mq.config.settings" id="settings">
+        <cm:default-properties>
+            <cm:property name="queuemanager" value="QMB"/>
+            <cm:property name="transport" value="0"/>
+            <cm:property name="listener" value="QUEUE1"/>
+            <cm:property name="sender" value="QUEUE2"/>
+        </cm:default-properties>
+   </cm:property-placeholder>
+
+   <cm:property-placeholder persistent-id="mq.example.message" id="messages" placeholder-prefix="$[" placeholder-suffix="]">
+        <cm:default-properties>
+            <cm:property name="listenermessage" value="MESSAGE RECEIVED FROM QUEUE1"/>
+            <cm:property name="processmessage" value="MESSAGE PROCESSED BY FIRST ROUTE"/>
+            <cm:property name="sendermessage" value="MESSAGE RECEIVED FROM QUEUE2"/>
+        </cm:default-properties>
+   </cm:property-placeholder>
+   -->
+<!-- troubleshooting
+    <bean class="org.apacheextras.camel.component.wmq.WMQComponent" id="wmq">
+        <property name="config" ref="wmqConfig"/>
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+    <bean class="org.apacheextras.camel.component.wmq.WMQConfig" id="wmqConfig">
+        <property name="queueManagerName" value="QMA"/>
+        <property name="connectionMode" value="binding"/>
+        <property name="queueManagerHostname" value="localhost"/>
+        -->
+<!--
+  	<property name="queueManagerChannel" value="${channel}"/>
+  	<property name="queueManagerPort" value="${port}"/>
+  	<property name="queueManagerUsername" value="${userID}"/>
+  	<property name="queueManagerPassword" value="${userPassword}"/>
+-->
+<!-- troubleshooting
+        <property name="connectionManager" ref="connectionManager"/>
+    </bean>
+    <bean class="com.ibm.mq.MQSimpleConnectionManager" id="connectionManager">
+        <property name="maxConnections" value="5"/>
+    </bean>
+    <bean
+        class="org.apacheextras.camel.component.wmq.WMQTransactionManager" id="transactionManager">
+        <property name="config" ref="wmqConfig"/>
+    </bean>
+
+    <camelContext id="wmq" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
+-->
+<!-- <route id="_route1">
+            <from id="_from1" uri="wmq:queue:QUEUE1"/>
+            <log id="_log1" message="WMQ / MESSAGE RECEIVED FROM QUEUE1 : ${body}"/>
+            <setBody id="_setBody1">
+                <simple>MESSAGE PROCESSED: ${body}</simple>
+            </setBody>
+            <to id="_to1" uri="wmq:queue:QUEUE2"/>
+        </route>
+        <route id="_route2">
+            <from id="_from2" uri="wmq:queue:QUEUE2"/>
+            <log id="_log2" message="WMQ / MESSAGE RECEIVED FROM QUEUE2: ${body}"/>
+        </route>  -->
+<!--  troubleshooting
+    </camelContext>
+</blueprint>
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:camel="http://camel.apache.org/schema/blueprint"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd                             http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    <camelContext id="blueprintContext" trace="false" xmlns="http://camel.apache.org/schema/blueprint">
+
+    </camelContext>
+</blueprint>
